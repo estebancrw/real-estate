@@ -1,0 +1,12 @@
+{
+  "name": "scraper",
+  "version": "0.0.0",
+  "description": "Scraper for real estate",
+  "engines": {
+    "node": "10.x"
+  },
+  "main": "src/index.js",
+  "author": "estebancrw",
+  "license": "MIT",
+  "private": true
+}
