@@ -13,6 +13,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
+  "dependencies": {
+    "puppeteer": "^3.1.0"
+  },
   "devDependencies": {
     "eslint": "^7.1.0",
     "eslint-config-airbnb": "^18.1.0",
