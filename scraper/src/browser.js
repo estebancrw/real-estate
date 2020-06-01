@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer')
+const log = require('./logger')
 
-function browser() {
+function Browser() {
   let lazyBrowser = null
   const waitUntil = 'networkidle2'
 
@@ -10,6 +11,7 @@ function browser() {
   // close :: void -> Promise<void>
   const close = async () => {
     if (isBrowserLaunched()) {
+      log.debug('browser: close')
       await lazyBrowser.close()
     }
   }
@@ -17,12 +19,14 @@ function browser() {
   // launch :: void -> Promise<void>
   const launch = async () => {
     if (!isBrowserLaunched()) {
+      log.debug('browser: launch')
       lazyBrowser = await puppeteer.launch()
     }
   }
 
   // getPage :: string -> Promise<page>
   const getPage = async (webpage) => {
+    log.debug('browser: new page', webpage)
     await launch()
 
     const page = await lazyBrowser.newPage()
@@ -41,4 +45,4 @@ function browser() {
   }
 }
 
-module.exports = browser()
+module.exports = Browser()
