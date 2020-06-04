@@ -45,7 +45,7 @@ function Scraper(rules) {
   }
 
   const scrapeListing = (page) => query(property.listing, page)
-  const scrapeProperty = (type, page) => query(property[type], page)
+  const scrapeProperty = ({ type }, page) => query(property[type], page)
 
   return {
     scrapeListing,

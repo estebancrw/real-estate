@@ -24,9 +24,15 @@ function Browser() {
     }
   }
 
-  // getPage :: string -> Promise<page>
-  const getPage = async (webpage) => {
-    log.debug('browser: new page', webpage)
+  // closePage :: page -> Promise<void>
+  const closePage = async (page) => {
+    log.debug('browser: close page')
+    await page.close()
+  }
+
+  // getPage :: string -> Promise<link>
+  const getPage = async (link) => {
+    log.debug('browser: new page', link)
     await launch()
 
     const page = await lazyBrowser.newPage()
@@ -34,13 +40,14 @@ function Browser() {
     const options = {
       waitUntil,
     }
-    await page.goto(webpage, options)
+    await page.goto(link, options)
 
     return page
   }
 
   return {
     close,
+    closePage,
     getPage,
   }
 }

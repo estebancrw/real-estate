@@ -21,14 +21,14 @@ function sitemap() {
   }
 
   const buildLink = (params) => {
-    const { state, city, neighbourhood, propertyType, propertyUse } = params
+    const { city, neighbourhood, state, type, use } = params
 
-    const type = translatePropertyType(propertyType)
-    const use = translatePropertyUse(propertyUse)
+    const translatedType = translatePropertyType(type)
+    const translatedUse = translatePropertyUse(use)
 
     const webpage = neighbourhood
-      ? `${website}/${state}/${city}/${neighbourhood}/${type}/${use}`
-      : `${website}/${state}/${city}/${type}/${use}`
+      ? `${website}/${state}/${city}/${neighbourhood}/${translatedType}/${translatedUse}`
+      : `${website}/${state}/${city}/${translatedType}/${translatedUse}`
 
     return webpage
   }

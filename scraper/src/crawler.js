@@ -1,6 +1,6 @@
-const limit = require('./promise-limit')
 const browser = require('./browser')
 const log = require('./logger')
+const { withRateLimit } = require('./rate-limit')
 const Scraper = require('./scraper')
 const websiteFactory = require('./websites')
 
@@ -8,44 +8,29 @@ function Crawler(website) {
   const { rules, sitemap } = websiteFactory(website)
   const scraper = Scraper(rules)
 
-  // getPropertyLinks :: listing -> Promise<link[]>
-  const getPropertyLinks = async (listing) => {
+  // getLinks :: listing -> Promise<link[]>
+  const getLinks = async (listing) => {
     log.info('crawler: get property links', listing)
     const listingLink = sitemap.buildLink(listing)
     const page = await browser.getPage(listingLink)
     const { links } = await scraper.scrapeListing(page)
+    await browser.closePage(page)
 
     return links
   }
 
-  // getProperty :: (type, link) -> Promise<property>
-  const getProperty = async (type, link) => {
+  // getProperty :: (listing, link) -> Promise<property>
+  const getProperty = async (listing, link) => {
     log.info('crawler: get property', link)
     const page = await browser.getPage(link)
+    await browser.closePage(page)
 
-    return scraper.scrapeProperty(type, page)
-  }
-
-  // getPropertyWithLimit :: (type, link) -> Promise<property>
-  const getPropertyWithLimit = async (type, link) =>
-    limit(() => getProperty(type, link))
-
-  // getProperties :: listing -> Promise<property[]>
-  const getProperties = async (listing) => {
-    log.info('crawler: get properties')
-    const { propertyType } = listing
-    const links = await getPropertyLinks(listing)
-
-    return Promise.all(
-      links.map((link) => getPropertyWithLimit(propertyType, link)),
-    )
+    return scraper.scrapeProperty(listing, page)
   }
 
   return {
-    getProperties,
-    getProperty,
-    getPropertyWithLimit,
-    getPropertyLinks,
+    getProperty: withLimit(getProperty),
+    getLinks: withLimit(getLinks),
   }
 }
 
