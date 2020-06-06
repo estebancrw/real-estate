@@ -1,0 +1,27 @@
+{
+  "property": {
+    "location": {
+      "states": [
+        {
+          "state": "jalisco",
+          "cities": [
+            "guadalajara",
+            "zapopan"
+          ]
+        }
+      ]
+    },
+    "types": [
+      "apartment",
+      "house",
+      "land"
+    ],
+    "uses": [
+      "rent",
+      "sale"
+    ],
+    "websites": [
+      "lamudi"
+    ]
+  }
+}
