@@ -1,6 +1,6 @@
 const { fromPairs } = require('ramda')
-const log = require('./logger')
-const property = require('./property')
+const log = require('../logger')
+const { propertyValues } = require('../property')
 
 function Scraper(rules) {
   const scrapeText = async (value, page) => {
@@ -8,10 +8,15 @@ function Scraper(rules) {
     const { selector, pickFunction } = rules[value]
 
     let text
-    if (value === 'links') {
-      text = await page.$$eval(selector, pickFunction)
-    } else {
-      text = await page.$eval(selector, pickFunction)
+    try {
+      if (value === 'links') {
+        text = await page.$$eval(selector, pickFunction)
+      } else {
+        text = await page.$eval(selector, pickFunction)
+      }
+    } catch (error) {
+      log.warn('scraper: value not found', value)
+      text = null
     }
 
     return text
@@ -30,13 +35,18 @@ function Scraper(rules) {
 
   const scrapeAndCleanText = async (value, page) => {
     const result = await scrapeText(value, page)
+
+    if (result === null) {
+      return [value, result]
+    }
+
     const text = cleanText(value, result)
 
     return [value, text]
   }
 
-  const query = async (values, page) => {
-    log.debug('scraper: query values', values)
+  const scrape = async (values, page) => {
+    log.debug('scraper: scrape values', values)
     const keyValuePairs = await Promise.all(
       values.map((value) => scrapeAndCleanText(value, page)),
     )
@@ -44,8 +54,8 @@ function Scraper(rules) {
     return fromPairs(keyValuePairs)
   }
 
-  const scrapeListing = (page) => query(property.listing, page)
-  const scrapeProperty = ({ type }, page) => query(property[type], page)
+  const scrapeListing = (page) => scrape(propertyValues.listing, page)
+  const scrapeProperty = ({ type }, page) => scrape(propertyValues[type], page)
 
   return {
     scrapeListing,

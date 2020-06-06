@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer')
-const log = require('./logger')
+const log = require('../logger')
 
 function Browser() {
   let lazyBrowser = null

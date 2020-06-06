@@ -1,8 +1,8 @@
 const browser = require('./browser')
-const log = require('./logger')
-const { withRateLimit } = require('./rate-limit')
+const log = require('../logger')
+const { withRateLimit } = require('../rate-limit')
 const Scraper = require('./scraper')
-const websiteFactory = require('./websites')
+const websiteFactory = require('../websites')
 
 function Crawler(website) {
   const { rules, sitemap } = websiteFactory(website)
@@ -23,14 +23,15 @@ function Crawler(website) {
   const getProperty = async (listing, link) => {
     log.info('crawler: get property', link)
     const page = await browser.getPage(link)
+    const property = await scraper.scrapeProperty(listing, page)
     await browser.closePage(page)
 
-    return scraper.scrapeProperty(listing, page)
+    return property
   }
 
   return {
-    getProperty: withLimit(getProperty),
-    getLinks: withLimit(getLinks),
+    getProperty: withRateLimit(getProperty),
+    getLinks: withRateLimit(getLinks),
   }
 }
 
