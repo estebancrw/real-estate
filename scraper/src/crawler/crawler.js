@@ -19,11 +19,11 @@ function Crawler(website) {
     return links
   }
 
-  // getProperty :: (listing, link) -> Promise<property>
-  const getProperty = async (listing, link) => {
+  // getProperty :: link -> Promise<property>
+  const getProperty = async (link) => {
     log.info('crawler: get property', link)
     const page = await browser.getPage(link)
-    const property = await scraper.scrapeProperty(listing, page)
+    const property = await scraper.scrapeProperty(page)
     await browser.closePage(page)
 
     return property

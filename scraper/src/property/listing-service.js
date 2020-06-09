@@ -1,6 +1,7 @@
-const { fromPairs, map, pipe } = require('ramda')
+const { fromPairs, map, pipe, take } = require('ramda')
 const Crawler = require('../crawler')
 const log = require('../logger')
+const Property = require('./property')
 
 function ListingService(websites) {
   // initializeCrawlers :: website[] -> crawler[]
@@ -17,9 +18,19 @@ function ListingService(websites) {
     const crawler = crawlers[website]
 
     const links = await crawler.getLinks(listing)
+    const partialLinks = take(1, links)
 
     const properties = await Promise.all(
-      links.map((link) => crawler.getProperty(listing, link)),
+      partialLinks.map(async (link) => {
+        const propertyValues = await crawler.getProperty(link)
+        const property = Property({
+          ...listing,
+          ...propertyValues,
+          link,
+        })
+
+        return property
+      }),
     )
 
     return properties

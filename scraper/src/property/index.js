@@ -1,5 +1,7 @@
-const propertyValues = require('./property-values')
+const generateListings = require('./generate-listings')
+const ListingService = require('./listing-service')
 
 module.exports = {
-  propertyValues,
+  generateListings,
+  ListingService,
 }

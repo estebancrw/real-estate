@@ -1,6 +1,6 @@
 const { take } = require('ramda')
 const data = require('../data.json')
-const { generateListings, ListingService } = require('./listing')
+const { generateListings, ListingService } = require('./property')
 const log = require('./logger')
 const { getWebsites, parseData } = require('./parse-data')
 
