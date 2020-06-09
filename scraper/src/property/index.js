@@ -1,7 +1,9 @@
 const generateListings = require('./generate-listings')
-const ListingService = require('./listing-service')
+const Links = require('./links')
+const Property = require('./property')
 
 module.exports = {
   generateListings,
-  ListingService,
+  Links,
+  Property,
 }

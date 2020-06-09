@@ -1,6 +1,7 @@
 const { take } = require('ramda')
+const CrawlerAggregate = require('./crawler')
 const data = require('../data.json')
-const { generateListings, ListingService } = require('./property')
+const { generateListings } = require('./property')
 const log = require('./logger')
 const { getWebsites, parseData } = require('./parse-data')
 
@@ -11,11 +12,16 @@ const run = async () => {
   const partialListings = take(1, listings)
 
   const websites = getWebsites(data)
-  const listingService = ListingService(websites)
+  const crawlerAggregate = CrawlerAggregate(websites)
 
   await Promise.all(
     partialListings.map(async (listing) => {
-      const properties = await listingService.getProperties(listing)
+      const links = await crawlerAggregate.getLinks(listing)
+
+      const partialLinks = take(1, links)
+
+      const properties = await crawlerAggregate.getProperties(partialLinks)
+
       log.info('run: properties', properties)
     }),
   )

@@ -1,3 +1,3 @@
-const Crawler = require('./crawler')
+const CrawlerAggregate = require('./crawler-aggregate')
 
-module.exports = Crawler
+module.exports = CrawlerAggregate

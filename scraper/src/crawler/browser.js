@@ -30,8 +30,8 @@ function Browser() {
     await page.close()
   }
 
-  // getPage :: string -> Promise<link>
-  const getPage = async (link) => {
+  // getPage :: { string } -> Promise<page>
+  const getPage = async ({ link }) => {
     log.debug('browser: new page', link)
     await launch()
 
