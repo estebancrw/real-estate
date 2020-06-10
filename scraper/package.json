@@ -12,8 +12,8 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "start": "node ./src/index.js",
-    "start:debug": "LOG_LEVEL='debug' node ./src/index.js"
+    "start": "functions-framework --target=scraper --signature-type=event",
+    "start:debug": "LOG_LEVEL='debug' yarn start"
   },
   "dependencies": {
     "bunyan": "^1.8.12",
@@ -22,6 +22,7 @@
     "ramda": "^0.27.0"
   },
   "devDependencies": {
+    "@google-cloud/functions-framework": "^1.5.1",
     "eslint": "^7.1.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.11.0",
