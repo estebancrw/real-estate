@@ -20,7 +20,11 @@ function Browser() {
   const launch = async () => {
     if (!isBrowserLaunched()) {
       log.debug('browser: launch')
-      lazyBrowser = await puppeteer.launch()
+      const params = {
+        args: ['--disable-dev-shm-usage', '--disable-gpu', '--single-process'],
+      }
+
+      lazyBrowser = await puppeteer.launch(params)
     }
   }
 
