@@ -1,5 +1,4 @@
 const { join, match, pipe, trim } = require('ramda')
-const { detailSelectorByValue } = require('./detail-selector')
 
 function rules() {
   // elementTextContent :: element -> string
@@ -11,6 +10,14 @@ function rules() {
   // matchNumbers :: string -> string
   const matchNumbers = pipe(match(/[0-9]/g), join(''))
 
+  // nextElementTextContent :: element -> string
+  const nextElementTextContent = (element) =>
+    element.nextElementSibling.textContent
+
+  // parentNextElementTextContent :: element -> string
+  const parentNextElementTextContent = (element) =>
+    element.parentElement.nextElementSibling.textContent
+
   // parseDecimal :: string -> number
   const parseDecimal = (numberString) => parseInt(numberString, 10)
 
@@ -18,24 +25,24 @@ function rules() {
   const matchAndParseNumbers = pipe(matchNumbers, parseDecimal)
 
   const bathrooms = {
-    clean: trim,
+    clean: matchAndParseNumbers,
     name: 'bathrooms',
-    pickFunction: elementTextContent,
-    selector: detailSelectorByValue('bathrooms'),
+    pickFunction: nextElementTextContent,
+    selector: 'div.Overview-attribute-wrapper > i.icon-bathrooms',
   }
 
   const bedrooms = {
-    clean: trim,
+    clean: matchAndParseNumbers,
     name: 'bedrooms',
-    pickFunction: elementTextContent,
-    selector: detailSelectorByValue('bedrooms'),
+    pickFunction: nextElementTextContent,
+    selector: 'div.Overview-attribute-wrapper > i.icon-bedrooms',
   }
 
   const buildingSize = {
-    clean: trim,
+    clean: matchAndParseNumbers,
     name: 'buildingSize',
-    pickFunction: elementTextContent,
-    selector: detailSelectorByValue('buildingSize'),
+    pickFunction: nextElementTextContent,
+    selector: 'div.Overview-attribute-wrapper > i.icon-livingsize',
   }
 
   const links = {
@@ -48,8 +55,8 @@ function rules() {
   const parking = {
     clean: trim,
     name: 'parking',
-    pickFunction: elementTextContent,
-    selector: detailSelectorByValue('parking'),
+    pickFunction: parentNextElementTextContent,
+    selector: 'div.ellipsis > span.icon-empty',
   }
 
   const price = {
