@@ -16,6 +16,7 @@
     "start:debug": "LOG_LEVEL='debug' yarn start"
   },
   "dependencies": {
+    "@google-cloud/firestore": "^3.8.5",
     "bunyan": "^1.8.12",
     "p-limit": "^2.3.0",
     "puppeteer": "^3.1.0",
