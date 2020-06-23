@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer')
+const { __, includes } = require('ramda')
 const log = require('../logger')
 
 function Browser() {
@@ -34,12 +35,26 @@ function Browser() {
     await page.close()
   }
 
+  // shouldSkip :: string -> boolean
+  const shouldSkip = includes(__, ['font', 'image', 'stylesheet', 'script'])
+
   // getPage :: { string } -> Promise<page>
   const getPage = async ({ link }) => {
     log.debug('browser: new page', link)
     await launch()
 
     const page = await lazyBrowser.newPage()
+
+    await page.setRequestInterception(true)
+    page.on('request', (request) => {
+      const type = request.resourceType()
+
+      if (shouldSkip(type)) {
+        request.abort()
+      } else {
+        request.continue()
+      }
+    })
 
     const options = {
       waitUntil,
