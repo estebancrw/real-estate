@@ -1,7 +1,7 @@
 const lamudi = require('./lamudi')
 
-function websiteFactory(website) {
-  if (website === 'lamudi') {
+function websiteFactory(name) {
+  if (name === 'lamudi') {
     return lamudi
   }
 

@@ -1,4 +1,4 @@
-function sitemap() {
+function sitemap(params) {
   const website = 'https://www.lamudi.com.mx'
 
   const translatePropertyType = (type) => {
@@ -20,8 +20,8 @@ function sitemap() {
     return property[use]
   }
 
-  const buildLink = (params) => {
-    const { city, neighbourhood, state, type, use } = params
+  const buildLink = (sitemapParams) => {
+    const { city, neighbourhood, state, type, use } = sitemapParams
 
     const translatedType = translatePropertyType(type)
     const translatedUse = translatePropertyUse(use)
@@ -33,9 +33,7 @@ function sitemap() {
     return webpage
   }
 
-  return {
-    buildLink,
-  }
+  return buildLink(params)
 }
 
-module.exports = sitemap()
+module.exports = sitemap

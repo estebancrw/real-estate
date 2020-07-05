@@ -42,5 +42,3 @@ function PropertyRepository() {
 }
 
 module.exports = PropertyRepository()
-
-// implement batchWrite

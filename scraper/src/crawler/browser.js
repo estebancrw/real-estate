@@ -56,9 +56,12 @@ function Browser() {
       }
     })
 
+    // page.on('console', (msg) => console[msg._type]('PAGE LOG:', msg._text))
+
     const options = {
       waitUntil,
     }
+
     await page.goto(link, options)
 
     return page

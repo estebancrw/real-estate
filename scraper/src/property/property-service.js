@@ -33,8 +33,6 @@ function PropertyService(crawlerAggregate) {
 
     log.info('property-service: store links', links)
     await linkRepository.addAll(links)
-
-    // perhaps crawler.close() here
   }
 
   return {

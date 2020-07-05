@@ -1,84 +1,28 @@
-const { and, fromPairs, has, prop } = require('ramda')
 const log = require('../logger')
 
-function Scraper(rules) {
-  // hasMultipleElements :: rule -> boolean
-  const hasMultipleElements = and(
-    has('multipleElements'),
-    prop('multipleElements'),
-  )
+function Scraper({ clean, pageFn }) {
+  // query :: (string, page) -> Promise<object>
+  const query = async (type, page) => {
+    log.debug('scraper: type', type)
 
-  // scrapeText :: (rule, page) -> Promise<string>
-  const scrapeText = async (rule, page) => {
-    const { selector, name, pickFunction } = rule
-    log.debug('scraper: text', name)
+    const result = await page.evaluate(pageFn, type)
+    log.debug('scraper: evaluate result', result)
 
-    let text
-    try {
-      if (hasMultipleElements(rule)) {
-        text = await page.$$eval(selector, pickFunction)
-      } else {
-        text = await page.$eval(selector, pickFunction)
-      }
-    } catch (error) {
-      log.warn('scraper: value not found', name)
-      text = null
-    }
+    const cleanResult = clean(type, result)
+    log.debug('scraper: clean result', cleanResult)
 
-    return text
+    return cleanResult
   }
 
-  // cleanText :: (rule, string) -> string
-  const cleanText = (rule, text) => {
-    const { clean, name } = rule
+  // scrapeProperty :: ({ type }, page) -> Promise<object>
+  const scrapeProperty = ({ type }, page) => query(type, page)
 
-    if (clean) {
-      log.debug('scraper: clean', name)
-      return clean(text)
-    }
-
-    return text
-  }
-
-  // scrapeAndCleanText :: (rule, page) -> Promise<string>
-  const scrapeAndCleanText = async (rule, page) => {
-    const result = await scrapeText(rule, page)
-
-    if (result === null) {
-      return result
-    }
-
-    const text = cleanText(rule, result)
-
-    return text
-  }
-
-  // query :: string -> page -> Promise<valuesObject>
-  const query = (type) => async (page) => {
-    log.debug('scraper: query values of', type)
-    const typeRules = rules[type]
-
-    const keyValuePairs = await Promise.all(
-      typeRules.map(async (rule) => {
-        const result = await scrapeAndCleanText(rule, page)
-        const { name } = rule
-
-        return [name, result]
-      }),
-    )
-
-    return fromPairs(keyValuePairs)
-  }
-
-  // scrapeListing :: page -> Promise<valuesObject>
-  const scrapeListing = query('listing')
-
-  // scrapeProperty :: page -> Promise<valuesObject>
-  const scrapeProperty = query('property')
+  // scrapeListing :: (page) -> Promise<object>
+  const scrapeListing = (page) => query('listing', page)
 
   return {
-    scrapeListing,
     scrapeProperty,
+    scrapeListing,
   }
 }
 

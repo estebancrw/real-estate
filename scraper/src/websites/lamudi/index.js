@@ -1,7 +1,9 @@
-const rules = require('./rules')
+const clean = require('./clean')
+const pageFn = require('./page-function')
 const sitemap = require('./sitemap')
 
 module.exports = {
-  rules,
+  clean,
+  pageFn,
   sitemap,
 }
