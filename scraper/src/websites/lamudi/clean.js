@@ -31,6 +31,9 @@ function clean(propertyType, scrapedProperty) {
   // buildingSizeFn :: object -> object
   const buildingSizeFn = safeClean('buildingSize', matchAndParseNumbers)
 
+  // landSizeFn :: object -> object
+  const landSizeFn = safeClean('landSize', matchAndParseNumbers)
+
   // priceFn :: object -> object
   const priceFn = safeClean('price', matchAndParseNumbers)
 
@@ -38,13 +41,19 @@ function clean(propertyType, scrapedProperty) {
   const cleanApartment = pipe(bathroomsFn, bedroomsFn, buildingSizeFn, priceFn)
 
   // cleanHouse :: object -> object
-  const cleanHouse = pipe(bathroomsFn, bedroomsFn, buildingSizeFn, priceFn)
+  const cleanHouse = pipe(
+    bathroomsFn,
+    bedroomsFn,
+    buildingSizeFn,
+    landSizeFn,
+    priceFn,
+  )
 
   // cleanListing :: object -> object
   const cleanListing = (property) => property
 
   // cleanLand :: object -> object
-  const cleanLand = priceFn
+  const cleanLand = pipe(landSizeFn, priceFn)
 
   if (propertyType === 'apartment') {
     return cleanApartment(scrapedProperty)

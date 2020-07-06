@@ -58,6 +58,15 @@ const pageFn = (property) => {
     textContent,
   )
 
+  // landSizeFn :: void -> string
+  const landSizeFn = safePipe(
+    queryDocument('#listing-details'),
+    queryElement('.icon-land-size'),
+    parentElement,
+    nextSiblingElement,
+    textContent,
+  )
+
   // apartment :: void -> object
   const apartment = () => {
     const bathrooms = bathroomsFn()
@@ -78,12 +87,14 @@ const pageFn = (property) => {
     const bathrooms = bathroomsFn()
     const bedrooms = bedroomsFn()
     const buildingSize = buildingSizeFn()
+    const landSize = landSizeFn()
     const price = priceFn()
 
     return {
       bathrooms,
       bedrooms,
       buildingSize,
+      landSize,
       price,
     }
   }
@@ -99,9 +110,11 @@ const pageFn = (property) => {
 
   // land :: void -> object
   const land = () => {
+    const landSize = landSizeFn()
     const price = priceFn()
 
     return {
+      landSize,
       price,
     }
   }
