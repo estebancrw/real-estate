@@ -4,7 +4,7 @@ const pageFn = (property) => {
   const { map, safePipe } = window.controlFn
   const { queryAllDocument, queryDocument } = window.documentFn
   const {
-    href,
+    attribute,
     nextSiblingElement,
     parentElement,
     queryElement,
@@ -14,7 +14,7 @@ const pageFn = (property) => {
   // linksFn :: void -> string[]
   const linksFn = safePipe(
     queryAllDocument('.ListingCell-moreInfo-button-v2_redesign'),
-    map(href),
+    map(attribute('href')),
   )
 
   // bathroomsFn :: void -> string
@@ -56,17 +56,33 @@ const pageFn = (property) => {
     textContent,
   )
 
+  // latitudeFn :: void -> string
+  const latitudeFn = safePipe(
+    queryDocument('#js-landmark-widget-pdp-container'),
+    attribute('data-lat'),
+  )
+
+  // longitudeFn :: void -> string
+  const longitudeFn = safePipe(
+    queryDocument('#js-landmark-widget-pdp-container'),
+    attribute('data-lon'),
+  )
+
   // apartment :: void -> object
   const apartment = () => {
     const bathrooms = bathroomsFn()
     const bedrooms = bedroomsFn()
     const buildingSize = buildingSizeFn()
+    const latitude = latitudeFn()
+    const longitude = longitudeFn()
     const price = priceFn()
 
     return {
       bathrooms,
       bedrooms,
       buildingSize,
+      latitude,
+      longitude,
       price,
     }
   }
@@ -77,6 +93,8 @@ const pageFn = (property) => {
     const bedrooms = bedroomsFn()
     const buildingSize = buildingSizeFn()
     const landSize = landSizeFn()
+    const latitude = latitudeFn()
+    const longitude = longitudeFn()
     const price = priceFn()
 
     return {
@@ -84,6 +102,8 @@ const pageFn = (property) => {
       bedrooms,
       buildingSize,
       landSize,
+      latitude,
+      longitude,
       price,
     }
   }
@@ -100,10 +120,14 @@ const pageFn = (property) => {
   // land :: void -> object
   const land = () => {
     const landSize = landSizeFn()
+    const latitude = latitudeFn()
+    const longitude = longitudeFn()
     const price = priceFn()
 
     return {
       landSize,
+      latitude,
+      longitude,
       price,
     }
   }

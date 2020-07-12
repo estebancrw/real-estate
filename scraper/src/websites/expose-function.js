@@ -28,7 +28,7 @@ const exposeFn = () => {
     queryAllDocument,
   }
 
-  const href = (element) => element.href
+  const attribute = (name) => (element) => element.getAttribute(name)
 
   const nextSiblingElement = (element) => element.nextElementSibling
 
@@ -40,7 +40,7 @@ const exposeFn = () => {
   const textContent = (element) => element.textContent
 
   window.elementFn = {
-    href,
+    attribute,
     nextSiblingElement,
     parentElement,
     queryElement,
