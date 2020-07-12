@@ -1,9 +1,12 @@
 const log = require('../logger')
 
-function Scraper({ clean, pageFn }) {
+function Scraper({ clean, exposeFn, pageFn }) {
   // query :: (string, page) -> Promise<object>
   const query = async (type, page) => {
     log.debug('scraper: type', type)
+
+    // add helper function to window
+    await page.evaluate(exposeFn)
 
     const result = await page.evaluate(pageFn, type)
     log.debug('scraper: evaluate result', result)

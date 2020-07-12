@@ -1,26 +1,15 @@
 /* eslint-env browser */
 
 const pageFn = (property) => {
-  const safePipe = (...fns) => (prop) => {
-    return fns.reduce((value, fn) => {
-      if (value === null) {
-        return null
-      }
-
-      return fn(value)
-    }, prop)
-  }
-  const map = (fn) => (list) => list.map(fn)
-
-  const queryDocument = (selector) => () => document.querySelector(selector)
-  const queryAllDocument = (selector) => () =>
-    Array.from(document.querySelectorAll(selector))
-  const queryElement = (selector) => (element) =>
-    element.querySelector(selector)
-  const parentElement = (element) => element.parentElement
-  const nextSiblingElement = (element) => element.nextElementSibling
-  const textContent = (element) => element.textContent
-  const href = (element) => element.href
+  const { map, safePipe } = window.controlFn
+  const { queryAllDocument, queryDocument } = window.documentFn
+  const {
+    href,
+    nextSiblingElement,
+    parentElement,
+    queryElement,
+    textContent,
+  } = window.elementFn
 
   // linksFn :: void -> string[]
   const linksFn = safePipe(

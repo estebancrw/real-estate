@@ -1,8 +1,12 @@
 const lamudi = require('./lamudi')
+const exposeFn = require('./expose-function')
 
 function websiteFactory(name) {
   if (name === 'lamudi') {
-    return lamudi
+    return {
+      exposeFn,
+      ...lamudi,
+    }
   }
 
   return null
