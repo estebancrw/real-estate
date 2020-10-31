@@ -7,9 +7,10 @@ module.exports = {
     'airbnb/base',
     'eslint:recommended',
     'plugin:import/errors',
+    'plugin:jest/recommended',
     'plugin:prettier/recommended',
   ],
-  plugins: ['prettier'],
+  plugins: ['jest', 'prettier'],
   rules: {
     'prettier/prettier': ['error'],
   },
