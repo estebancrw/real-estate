@@ -1,8 +1,6 @@
 const Listing = ({ state, city, type, use, website }) => ({
-  location: {
-    city,
-    state,
-  },
+  city,
+  state,
   type,
   use,
   website,

@@ -2,10 +2,8 @@ const buildUrl = require('./build-url')
 
 test('builds a url from a listing', () => {
   const listing = {
-    location: {
-      city: 'guadalajara',
-      state: 'jalisco',
-    },
+    city: 'guadalajara',
+    state: 'jalisco',
     type: 'apartment',
     use: 'rent',
     website: 'casasyterrenos',

@@ -1,8 +1,7 @@
 const buildUrl = (listing) => {
   const domain = 'www.casasyterrenos.com'
   const protocol = 'https'
-  const { location, type, use } = listing
-  const { state, city } = location
+  const { city, state, type, use } = listing
 
   const translateType = (type) => {
     const property = {

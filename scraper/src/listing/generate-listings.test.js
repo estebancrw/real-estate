@@ -16,19 +16,15 @@ test('generates a list of listings', () => {
   }
   const listings = [
     {
-      location: {
-        city: 'guadalajara',
-        state: 'jalisco',
-      },
+      city: 'guadalajara',
+      state: 'jalisco',
       type: 'apartment',
       use: 'rent',
       website: 'casasyterrenos',
     },
     {
-      location: {
-        city: 'zapopan',
-        state: 'jalisco',
-      },
+      city: 'zapopan',
+      state: 'jalisco',
       type: 'apartment',
       use: 'rent',
       website: 'casasyterrenos',
