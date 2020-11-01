@@ -6,7 +6,7 @@
 
 const queryPropertyUrls = require('./query-property-urls')
 
-test('builds casasyterrenos object with all properties', () => {
+test('queries property urls from DOM', () => {
   document.body.innerHTML = `
   <div class="sidebar">
     <a href="/first/path"></a>
