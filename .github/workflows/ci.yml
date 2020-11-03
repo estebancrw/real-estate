@@ -18,3 +18,19 @@ jobs:
         working-directory: scraper
       - run: yarn lint
         working-directory: scraper
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup-node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+
+      - run: yarn install
+        working-directory: scraper
+      - run: yarn test
+        working-directory: scraper
