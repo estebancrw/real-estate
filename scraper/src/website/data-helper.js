@@ -1,13 +1,16 @@
-const { join, match, pipe } = require('ramda')
+const { isNil, join, match, pipe } = require('ramda')
 
 const matchNumbers = pipe(match(/[0-9]/g), join(''))
 
 const parseDecimal = (numberString) => parseInt(numberString, 10)
 
-const matchAndParseDecimal = pipe(matchNumbers, parseDecimal)
+const matchDecimal = pipe(matchNumbers, parseDecimal)
+
+const safeCall = (fn, arg) => (isNil(arg) ? null : fn(arg))
 
 module.exports = {
-  matchAndParseDecimal,
+  matchDecimal,
   matchNumbers,
   parseDecimal,
+  safeCall,
 }
