@@ -1,27 +1,53 @@
-const CrawlerAggregate = require('./crawler')
-const dataFile = require('../data.json')
-const { generateListings, PropertyService } = require('./property')
-const log = require('./logger')
-const { getWebsites, parseData } = require('./parse-data')
+const { generateListings, ListingService } = require('./listing')
+const { PropertyService } = require('./property')
+const Website = require('./website')
 
-// Background Cloud Function
-exports.scraper = async (data, context, callback) => {
-  const listingData = parseData(dataFile)
-  const listings = generateListings(listingData)
+const website = Website()
 
-  const websites = getWebsites(dataFile)
-  const crawlerAggregate = CrawlerAggregate(websites)
-  const propertyService = PropertyService(crawlerAggregate)
+const config = {
+  property: {
+    states: [
+      {
+        state: 'jalisco',
+        cities: ['zapopan'],
+      },
+    ],
+    types: ['apartment'],
+    uses: ['rent'],
+    websites: ['casasyterrenos'],
+  },
+}
 
-  try {
-    const links = await propertyService.linksFromListings(listings)
-    const properties = await propertyService.propertiesFromLinks(links)
+exports.fetchListing = async (data, context, callback) => {
+  const listings = generateListings(config)
+  const listingService = ListingService(website)
 
-    await propertyService.commit(links, properties)
-  } catch (error) {
-    log.error(error)
-    callback(error)
-  }
+  listings.map(async (listing) => {
+    console.log(listing)
+
+    const propertyUrls = await listingService.fetchUrls(listing)
+    console.log(propertyUrls)
+  })
+
+  // TODO: filter new propertyUrls
+  // TODO: publish listing with propertyUrls
+
+  callback()
+}
+
+exports.fetchProperties = async (data, context, callback) => {
+  const { listing, urls } = JSON.parse(data.message.data)
+
+  const propertyService = PropertyService(website)
+
+  urls.map(async (url) => {
+    console.log(url)
+
+    const property = await propertyService.fetchProperty(listing, url)
+    console.log(property)
+  })
+
+  // TODO: publish listing with properties
 
   callback()
 }
