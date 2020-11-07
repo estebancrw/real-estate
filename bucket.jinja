@@ -1,8 +1,0 @@
-resources:
-  - type: gcp-types/storage-v1:buckets
-    name: {{ env['project'] }}-{{ env['name'] }}
-    properties:
-      predefinedAcl: projectPrivate
-      projection: full
-      location: US-CENTRAL1
-      storageClass: STANDARD

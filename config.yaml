@@ -1,9 +1,0 @@
-imports:
-  - path: bucket.jinja
-  - path: pubsub.jinja
-
-resources:
-  - name: function
-    type: bucket.jinja
-  - name: scraper
-    type: pubsub.jinja
