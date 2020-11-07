@@ -1,3 +1,13 @@
+terraform {
+  backend "remote" {
+    organization = "estebancrw"
+
+    workspaces {
+      name = "real-estate"
+    }
+  }
+}
+
 provider "google" {
   project = "splendid-flow-279822"
   region  = "us-central1"
