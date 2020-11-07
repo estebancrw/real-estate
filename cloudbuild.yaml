@@ -1,11 +1,13 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: hashicorp/terraform
     args:
-      - functions
-      - deploy
-      - scraper
-      - --source=scraper
-      - --runtime=nodejs12
-      - --trigger-topic=test-topic
-      - --memory=1024MB
-tags: ['function', 'scraper']
+      - 'init'
+
+  - name: hashicorp/terraform
+    args:
+      - 'validate'
+
+  - name: hashicorp/terraform
+    args:
+      - 'apply'
+      - '-auto-approve'
