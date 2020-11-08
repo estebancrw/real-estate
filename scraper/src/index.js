@@ -22,12 +22,14 @@ exports.fetchListing = async (data, context, callback) => {
   const listings = generateListings(config)
   const listingService = ListingService(website)
 
-  listings.map(async (listing) => {
-    console.log(listing)
+  await Promise.all(
+    listings.map(async (listing) => {
+      console.log(listing)
 
-    const propertyUrls = await listingService.fetchUrls(listing)
-    console.log(propertyUrls)
-  })
+      const propertyUrls = await listingService.fetchUrls(listing)
+      console.log(propertyUrls)
+    }),
+  )
 
   // TODO: filter new propertyUrls
   // TODO: publish listing with propertyUrls
@@ -40,12 +42,16 @@ exports.fetchProperties = async (data, context, callback) => {
 
   const propertyService = PropertyService(website)
 
-  urls.map(async (url) => {
-    console.log(url)
+  await Promise.all(
+    urls.map(async (url) => {
+      console.log(url)
 
-    const property = await propertyService.fetchProperty(listing, url)
-    console.log(property)
-  })
+      const property = await propertyService.fetchProperty(listing, url)
+      console.log(property)
+
+      return property
+    }),
+  )
 
   // TODO: publish listing with properties
 
