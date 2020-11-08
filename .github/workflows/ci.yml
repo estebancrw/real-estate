@@ -34,3 +34,15 @@ jobs:
         working-directory: scraper
       - run: yarn test
         working-directory: scraper
+
+  terraform-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup
+        uses: hashicorp/setup-terraform@v1
+
+      - name: format
+        run: terraform fmt -check
