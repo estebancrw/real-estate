@@ -26,8 +26,15 @@ exports.fetchListing = async (data, context, callback) => {
     listings.map(async (listing) => {
       console.log(listing)
 
-      const propertyUrls = await listingService.fetchUrls(listing)
-      console.log(propertyUrls)
+      let urls = []
+      try {
+        urls = await listingService.fetchUrls(listing)
+      } catch (error) {
+        console.error(error)
+      }
+      console.log(urls)
+
+      return urls
     }),
   )
 
@@ -46,7 +53,12 @@ exports.fetchProperties = async (data, context, callback) => {
     urls.map(async (url) => {
       console.log(url)
 
-      const property = await propertyService.fetchProperty(listing, url)
+      let property
+      try {
+        property = await propertyService.fetchProperty(listing, url)
+      } catch (error) {
+        console.error(error)
+      }
       console.log(property)
 
       return property
