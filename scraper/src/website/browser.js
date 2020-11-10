@@ -48,10 +48,11 @@ function Browser() {
     })
 
     page.on('console', (msg) => {
-      if (msg._text.includes('net::ERR_FAILED')) {
+      const text = msg.text()
+      if (text.includes('net::ERR_FAILED')) {
         return
       }
-      console.log(msg._text)
+      console.log(text)
     })
 
     const options = {
