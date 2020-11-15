@@ -21,12 +21,17 @@ data "archive_file" "scraper_zip" {
   output_path = "${path.root}/scraper.zip"
 }
 
+locals {
+  // adds md5 to object name
+  gcs_object_name = "scraper.${data.archive_file.scraper_zip.output_md5}.zip"
+}
+
 resource "google_storage_bucket" "bucket" {
   name = "${data.google_project.project.project_id}-real-estate"
 }
 
 resource "google_storage_bucket_object" "scraper_zip" {
-  name   = "scraper.zip"
+  name   = local.gcs_object_name
   bucket = google_storage_bucket.bucket.name
   source = "${path.root}/scraper.zip"
 }
