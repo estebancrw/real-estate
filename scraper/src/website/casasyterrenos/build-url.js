@@ -3,20 +3,20 @@ const buildUrl = (listing) => {
   const protocol = 'https'
   const { city, state, type, use } = listing
 
-  const translateType = (type) => {
+  const translateType = (propertyType) => {
     const property = {
       apartment: 'departamentos',
     }
 
-    return property[type]
+    return property[propertyType]
   }
 
-  const translateUse = (use) => {
+  const translateUse = (propertyUse) => {
     const property = {
       rent: 'renta',
     }
 
-    return property[use]
+    return property[propertyUse]
   }
 
   const translatedType = translateType(type)

@@ -1,4 +1,5 @@
 const Factory = require('./factory')
+const log = require('../logger')
 
 function Website(browser) {
   const fetchListing = async (listing) => {
@@ -12,7 +13,7 @@ function Website(browser) {
 
       await browser.closePage(webpage)
     } catch (error) {
-      console.error(error)
+      log.error('website: error', error)
     }
 
     return propertyUrls
@@ -30,7 +31,7 @@ function Website(browser) {
 
       await browser.closePage(webpage)
     } catch (error) {
-      console.error(error)
+      log.error('website: error', error)
     }
 
     return property

@@ -1,14 +1,14 @@
 /* eslint-env browser */
 
 const queryApartment = () => {
-  const findAmenityText = (text, amenityElements) => {
-    const amenityElement = amenityElements.find(
+  const findAmenityText = (text, elements) => {
+    const amenityElement = elements.find(
       ({ textContent }) => textContent === text,
     )
     return amenityElement.previousSibling.textContent
   }
-  const findUnitText = (text, unitElements) => {
-    const unitElement = unitElements.find(
+  const findUnitText = (text, elements) => {
+    const unitElement = elements.find(
       (element) => element.nextSibling.textContent === text,
     )
     return unitElement.textContent

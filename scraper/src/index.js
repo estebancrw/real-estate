@@ -1,7 +1,7 @@
 const { generateListings, ListingService } = require('./listing')
+const log = require('./logger')
 const { PropertyService } = require('./property')
 const { Browser, Website } = require('./website')
-
 
 const config = {
   property: {
@@ -27,15 +27,15 @@ exports.fetchListing = async (data, context, callback) => {
 
   await Promise.all(
     listings.map(async (listing) => {
-      console.log(listing)
+      log.info('fetchListing: listing', listing)
 
       let urls = []
       try {
         urls = await listingService.fetchUrls(listing)
       } catch (error) {
-        console.error(error)
+        log.error('fetchListing: error', error)
       }
-      console.log(urls)
+      log.info('fetchListing: urls', urls)
 
       return urls
     }),
@@ -58,15 +58,15 @@ exports.fetchProperties = async (data, context, callback) => {
 
   await Promise.all(
     urls.map(async (url) => {
-      console.log(url)
+      log.info('fetchProperties: url', url)
 
       let property
       try {
         property = await propertyService.fetchProperty(listing, url)
       } catch (error) {
-        console.error(error)
+        log.error('fetchProperties: error', error)
       }
-      console.log(property)
+      log.info('fetchProperties: property', property)
 
       return property
     }),
