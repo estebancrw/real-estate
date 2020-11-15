@@ -3,25 +3,26 @@ const { __, includes } = require('ramda')
 const log = require('../logger')
 
 function Browser() {
-  let lazyBrowser = null
+  let browser
 
-  // isBrowserLaunched :: void -> boolean
-  const isBrowserLaunched = () => lazyBrowser !== null
+  // open :: void -> Promise<browser>
+  const open = async () => {
+    log.debug('browser: open browser')
 
-  // launch :: void -> Promise<void>
-  const launch = async () => {
-    if (!isBrowserLaunched()) {
-      log.debug('browser: launch')
-      const params = {
-        args: ['--disable-dev-shm-usage', '--disable-gpu', '--single-process'],
-      }
-
-      lazyBrowser = await puppeteer.launch(params)
+    const params = {
+      args: ['--disable-dev-shm-usage', '--disable-gpu', '--single-process'],
     }
+    browser = await puppeteer.launch(params)
   }
 
-  // close:: page -> Promise<void>
-  const close = async (page) => {
+  // close :: void -> Promise<void>
+  const close = async () => {
+    log.debug('browser: close browser')
+    await browser.close()
+  }
+
+  // closePage :: page -> Promise<void>
+  const closePage = async (page) => {
     log.debug('browser: close page')
     await page.close()
   }
@@ -29,12 +30,10 @@ function Browser() {
   // shouldSkip :: string -> boolean
   const shouldSkip = includes(__, ['font', 'image', 'stylesheet', 'script'])
 
-  // open :: string -> Promise<page>
-  const open = async (url) => {
+  // openPage :: string -> Promise<page>
+  const openPage = async (url) => {
     log.debug('browser: new page', url)
-    await launch()
-
-    const page = await lazyBrowser.newPage()
+    const page = await browser.newPage()
 
     await page.setRequestInterception(true)
     page.on('request', (request) => {
@@ -52,7 +51,7 @@ function Browser() {
       if (text.includes('net::ERR_FAILED')) {
         return
       }
-      console.log(text)
+      log.debug(text)
     })
 
     const options = {
@@ -66,7 +65,9 @@ function Browser() {
 
   return {
     close,
+    closePage,
     open,
+    openPage,
   }
 }
 

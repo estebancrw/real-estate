@@ -1,3 +1,7 @@
+const Browser = require('./browser')
 const Website = require('./website')
 
-module.exports = Website
+module.exports = {
+  Browser,
+  Website,
+}

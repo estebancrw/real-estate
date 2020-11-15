@@ -1,19 +1,16 @@
-const Browser = require('./browser')
 const Factory = require('./factory')
 
-function Website() {
-  const browser = Browser()
-
+function Website(browser) {
   const fetchListing = async (listing) => {
     const { buildUrl, scraper } = Factory(listing)
     const listingUrl = buildUrl(listing)
 
     let propertyUrls = []
     try {
-      const webpage = await browser.open(listingUrl)
+      const webpage = await browser.openPage(listingUrl)
       propertyUrls = await scraper.propertyUrls(webpage)
 
-      await browser.close(webpage)
+      await browser.closePage(webpage)
     } catch (error) {
       console.error(error)
     }
@@ -28,10 +25,10 @@ function Website() {
 
     let property = {}
     try {
-      const webpage = await browser.open(url)
+      const webpage = await browser.openPage(url)
       property = await scraperFn(webpage)
 
-      await browser.close(webpage)
+      await browser.closePage(webpage)
     } catch (error) {
       console.error(error)
     }
