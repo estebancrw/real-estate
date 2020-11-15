@@ -46,7 +46,7 @@ resource "google_cloudfunctions_function" "scraper_fetch_listing" {
     resource   = google_pubsub_topic.trigger.name
   }
 
-  available_memory_mb   = 1024
+  available_memory_mb   = 2048
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.scraper_zip.name
 }
@@ -66,7 +66,7 @@ resource "google_cloudfunctions_function" "scraper_fetch_properties" {
     resource   = google_pubsub_topic.listing.name
   }
 
-  available_memory_mb   = 1024
+  available_memory_mb   = 2048
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.scraper_zip.name
 }
