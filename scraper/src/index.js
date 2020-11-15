@@ -1,6 +1,7 @@
 const { generateListings, ListingService } = require('./listing')
 const log = require('./logger')
 const { PropertyService } = require('./property')
+const Publisher = require('./publisher')
 const { Browser, Website } = require('./website')
 
 const config = {
@@ -23,26 +24,32 @@ exports.fetchListing = async (data, context, callback) => {
   const browser = Browser()
   await browser.open()
   const website = Website(browser)
-  const listingService = ListingService(website)
+  const publisher = Publisher()
+  const listingService = ListingService(publisher, website)
 
   await Promise.all(
     listings.map(async (listing) => {
       log.info('fetchListing: listing', listing)
 
+      let messageId = null
       let urls = []
       try {
         urls = await listingService.fetchUrls(listing)
+        log.info('fetchListing: urls', urls)
+
+        messageId = await listingService.publishUrls(listing, urls)
       } catch (error) {
         log.error('fetchListing: error', error)
       }
-      log.info('fetchListing: urls', urls)
 
-      return urls
+      return {
+        messageId,
+        urls,
+      }
     }),
   )
 
   // TODO: filter new propertyUrls
-  // TODO: publish listing with propertyUrls
 
   await browser.close()
   callback()

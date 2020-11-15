@@ -12,9 +12,7 @@ const queryPropertyUrls = () => {
     hrefElement.getAttribute(hrefAttribute),
   )
 
-  return {
-    urls,
-  }
+  return urls
 }
 
 module.exports = queryPropertyUrls

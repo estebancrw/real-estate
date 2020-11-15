@@ -13,9 +13,7 @@ test('queries property urls from DOM', () => {
     <a href="/second/path"></a>
   </div>
   `
-  const urls = {
-    urls: ['/first/path', '/second/path'],
-  }
+  const urls = ['/first/path', '/second/path']
 
   expect(queryPropertyUrls()).toStrictEqual(urls)
 })

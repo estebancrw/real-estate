@@ -54,6 +54,10 @@ resource "google_cloudfunctions_function" "scraper_fetch_listing" {
   available_memory_mb   = 2048
   source_archive_bucket = google_storage_bucket.bucket.name
   source_archive_object = google_storage_bucket_object.scraper_zip.name
+
+  environment_variables = {
+    PUBSUB_TOPIC = google_pubsub_topic.listing.name
+  }
 }
 
 resource "google_pubsub_topic" "listing" {

@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@google-cloud/firestore": "^4.7.0",
+    "@google-cloud/pubsub": "^2.6.0",
     "bunyan": "^1.8.12",
     "p-limit": "^3.0.2",
     "puppeteer": "^5.4.1",
