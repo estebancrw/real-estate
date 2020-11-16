@@ -1,3 +1,4 @@
+const { decodeJson } = require('./base64')
 const { generateListings, ListingService } = require('./listing')
 const log = require('./logger')
 const { PropertyService } = require('./property')
@@ -55,8 +56,8 @@ exports.fetchListing = async (data, context, callback) => {
   callback()
 }
 
-exports.fetchProperties = async (data, context, callback) => {
-  const { listing, urls } = JSON.parse(data.message.data)
+exports.fetchProperties = async (message, context, callback) => {
+  const { listing, urls } = decodeJson(message.data)
 
   const browser = Browser()
   await browser.open()
