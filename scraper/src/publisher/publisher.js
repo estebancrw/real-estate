@@ -8,6 +8,7 @@ function Publisher() {
 
   const topic = pubSubClient.topic(topicName)
 
+  // publish :: object -> Promise<void>
   const publish = async (data) => {
     log.debug('pubsub: data', data)
     const dataString = JSON.stringify(data)
@@ -21,8 +22,13 @@ function Publisher() {
     }
   }
 
+  // publishMultiple :: object[] -> Promise<void>
+  const publishMultiple = (dataList) =>
+    Promise.all(dataList.map((data) => publish(data)))
+
   return {
     publish,
+    publishMultiple,
   }
 }
 
