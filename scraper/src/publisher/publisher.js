@@ -15,7 +15,7 @@ function Publisher() {
     const dataBuffer = Buffer.from(dataString)
 
     try {
-      const messageId = topic.publish(dataBuffer)
+      const messageId = await topic.publish(dataBuffer)
       log.debug('pubsub: messageId', messageId)
     } catch (error) {
       log.error('pubsub: error', error)
