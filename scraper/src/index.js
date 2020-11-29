@@ -1,3 +1,4 @@
+const tracing = require('./tracing')
 const { decodeJson } = require('./base64')
 const { generateListings, ListingService } = require('./listing')
 const log = require('./logger')
@@ -20,13 +21,14 @@ const config = {
 }
 
 exports.fetchListing = async (data, context, callback) => {
+  tracing.startTrace()
   const listings = generateListings(config)
 
   const browser = Browser()
   await browser.open()
   const website = Website(browser)
   const publisher = Publisher()
-  const listingService = ListingService(publisher, website)
+  const listingService = ListingService({ publisher, tracing, website })
 
   await Promise.all(
     listings.map(async (listing) => {
@@ -53,16 +55,18 @@ exports.fetchListing = async (data, context, callback) => {
   // TODO: filter new propertyUrls
 
   await browser.close()
+  tracing.finishTrace()
   callback()
 }
 
 exports.fetchProperties = async (message, context, callback) => {
+  tracing.startTrace()
   const { listing, urls } = decodeJson(message.data)
 
   const browser = Browser()
   await browser.open()
   const website = Website(browser)
-  const propertyService = PropertyService(website)
+  const propertyService = PropertyService({ tracing, website })
 
   await Promise.all(
     urls.map(async (url) => {
@@ -83,5 +87,6 @@ exports.fetchProperties = async (message, context, callback) => {
   // TODO: publish listing with properties
 
   await browser.close()
+  tracing.finishTrace()
   callback()
 }

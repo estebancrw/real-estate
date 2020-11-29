@@ -1,18 +1,34 @@
 const { splitEvery } = require('ramda')
 
-function ListingService(publisher, website) {
+function ListingService({ publisher, tracing, website }) {
   const slicesNumber = 20
 
-  const fetchUrls = (listing) => website.fetchListing(listing)
+  const fetchUrls = async (listing) => {
+    const context = {
+      ...listing,
+      name: 'fetch urls',
+    }
+    const span = tracing.startSpan(context)
+    const urls = await website.fetchListing(listing)
+    tracing.finishSpan(span)
 
-  const publishUrls = (listing, allUrls) => {
+    return urls
+  }
+
+  const publishUrls = async (listing, allUrls) => {
+    const context = {
+      ...listing,
+      name: 'publish urls',
+    }
+    const span = tracing.startSpan(context)
     const urlSlices = splitEvery(slicesNumber, allUrls)
     const listingUrlSlices = urlSlices.map((urls) => ({
       listing,
       urls,
     }))
 
-    return publisher.publishMultiple(listingUrlSlices)
+    await publisher.publishMultiple(listingUrlSlices)
+    tracing.finishSpan(span)
   }
 
   return {

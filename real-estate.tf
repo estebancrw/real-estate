@@ -13,6 +13,10 @@ provider "google" {
   region  = "us-central1"
 }
 
+variable "honeycomb_api_key" {
+  type = string
+}
+
 data "google_project" "project" {}
 
 data "archive_file" "scraper_zip" {
@@ -56,6 +60,7 @@ resource "google_cloudfunctions_function" "scraper_fetch_listing" {
   source_archive_object = google_storage_bucket_object.scraper_zip.name
 
   environment_variables = {
+    HONEYCOMB_API_KEY = var.honeycomb_api_key
     PUBSUB_TOPIC = google_pubsub_topic.listing.name
   }
 }
